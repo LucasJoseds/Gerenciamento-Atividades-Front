@@ -4,13 +4,13 @@ import { withRouter } from 'react-router-dom'
 class LandingPage extends React.Component {
 
     goToHomePage = () => {
-        this.props.history.push("/home")
+        this.props.history.push("/login")
     }
 
     render(){
         return (
             <div className="container text-center" >
-                <h2>Bem vindo ao sistema Minhas Finanças</h2>
+                <h2>Bem vindo ao sistema Minhas Tarefas</h2>
                 Este é seu sistema para controle de finanças pessoais,
                 clique no botão abaixo para acessar o sistema: < br/>< br/>
 

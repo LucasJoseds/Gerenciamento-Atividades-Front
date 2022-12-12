@@ -3,52 +3,37 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import Card from '../components/card'
 import FormGroup from '../components/form-group'
-
 import UsuarioService from '../app/service/usuarioService'
 import { mensagemSucesso, mensagemErro } from '../components/toastr'
 import * as messages from '../components/toastr'
 
-class CadastroUsuario extends React.Component{
+class EditarUsuarios extends React.Component{
 
-    state = {
-        nome : '',
-        email: '', 
-        senha: '',
-        senhaRepeticao : '',
-        atualizando:false
-    }
 
     constructor(){
         super();
         this.service = new UsuarioService();
     }
 
-    cadastrar = () => {
-
-        const {nome, email, senha, senhaRepeticao } = this.state        
-        const usuario = {nome,  email, senha, senhaRepeticao }
-
-        try{
-            this.service.validar(usuario);
-        }catch(erro){
-            const msgs = erro.mensagens;
-            msgs.forEach(msg => mensagemErro(msg));
-            return false;
+    componentDidMount(){
+        const params = this.props.match.params
+       
+        if(params.id){
+            this.service
+                .obterPorId(params.id)
+                .then(response => {
+                    this.setState( {...response.data} )
+                })
+                .catch(erros => {
+                    messages.mensagemErro(erros.response.data)
+                })
         }
-
-        this.service.salvar(usuario)
-            .then( response => {
-                mensagemSucesso('Usuário cadastrado com sucesso! Faça o login para acessar o sistema.')
-                this.props.history.push('/login')
-            }).catch(error => {
-                mensagemErro(error.response.data)
-            })
     }
 
     atualizar = () => {
-        const { nome,email,senha,id } = this.state;
+        const { nome,email,id } = this.state;
 
-        const usuario = { nome,email,senha, id };
+        const usuario = { nome,email, id };
         
         this.service
             .atualizar(usuario)
@@ -62,12 +47,12 @@ class CadastroUsuario extends React.Component{
 
 
     cancelar = () => {
-        this.props.history.push('/login')
+        this.props.history.push('/consulta-usuarios')
     }
 
     render(){
         return (
-            <Card title ="Cadastro de Usuário">
+            <Card title ="Atualizar de Usuário">
                 <div className="row">
                     <div className="col-lg-12">
                         <div className="bs-component">
@@ -85,22 +70,8 @@ class CadastroUsuario extends React.Component{
                                        name="email"
                                        onChange={e => this.setState({email: e.target.value})} />
                             </FormGroup>
-                            <FormGroup label="Senha: *" htmlFor="inputSenha">
-                                <input type="password" 
-                                       id="inputSenha"
-                                       className="form-control"
-                                       name="senha"
-                                       onChange={e => this.setState({senha: e.target.value})} />
-                            </FormGroup>
-                            <FormGroup label="Repita a Senha: *" htmlFor="inputRepitaSenha">
-                                <input type="password" 
-                                       id="inputRepitaSenha"
-                                       className="form-control"
-                                       name="senha"
-                                       onChange={e => this.setState({senhaRepeticao: e.target.value})} />
-                            </FormGroup>
                             <button onClick={this.cadastrar} type="button" className="btn btn-success">
-                                <i className="pi pi-save"></i> Salvar
+                                <i className="pi pi-refresh"></i> Atualizar
                             </button>
                             <button onClick={this.cancelar} type="button" className="btn btn-danger">
                                 <i className="pi pi-times"></i> Cancelar
@@ -113,4 +84,4 @@ class CadastroUsuario extends React.Component{
     }
 }
 
-export default withRouter(CadastroUsuario)
+export default withRouter(EditarUsuarios)

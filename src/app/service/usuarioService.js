@@ -12,13 +12,30 @@ class UsuarioService extends ApiService {
         return this.post('/autenticar', credenciais)
     }
 
-    obterSaldoPorUsuario(id){
-        return this.get(`/${id}/saldo`);
-    }
 
     salvar(usuario){
-        return this.post('', usuario);
+        return this.post('/cadastrar', usuario);
     }
+
+    obterPorId(id){
+        return this.get(`/${id}`);
+    }
+
+
+    consultar(usuarioFiltro){
+        let params = `?nome=${usuarioFiltro.nome}`
+
+        return this.get(params);
+    }
+
+    deletar(id){
+        return this.delete(`/${id}`)
+    }
+
+    atualizar(usuario){
+        return this.put(`/${usuario.id}`, usuario);
+    }
+
 
     validar(usuario){
         const erros = []
