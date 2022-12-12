@@ -51,21 +51,6 @@ class CadastroAtividades extends React.Component {
             })
     }
 
-    atualizar = () => {
-        const { descricao, valor, mes, ano, tipo, status, usuario, id } = this.state;
-
-        const lancamento = { descricao, valor, mes, ano, tipo, usuario, status, id };
-        
-        this.service
-            .atualizar(lancamento)
-            .then(response => {
-                this.props.history.push('/consulta-atividades')
-                messages.mensagemSucesso('Lançamento atualizado com sucesso!')
-            }).catch(error => {
-                messages.mensagemErro(error.response.data)
-            })
-    }
-
     handleChange = (event) => {
         const value = event.target.value;
         const name = event.target.name;
